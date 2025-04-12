@@ -45,16 +45,16 @@ public class Cell : MonoBehaviour
         this.y = y;
         CellMark = CellMark.Empty;
         button.onClick.RemoveAllListeners();
-        //button.onClick.AddListener(OnCellClicked);
+        button.onClick.AddListener(OnCellClicked);
     }
 
-    // private void OnCellClicked()
-    // {
-    //     if (cellMark == CellMark.Empty)
-    //     {
-    //         GameManager.Instance.OnCellClicked(x, y);
-    //     }
-    // }
+    private void OnCellClicked()
+    {
+        if (cellMark == CellMark.Empty)
+        {
+            GameManager.Instance.OnCellClicked(x, y);
+        }
+    }
 
     private void UpdateCellSprite()
     {

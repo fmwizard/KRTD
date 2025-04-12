@@ -20,13 +20,14 @@ public class Board : MonoBehaviour
 
     void Start()
     {
-        cellPrefab = GameManager.Instance.cellPrefab;
-        cellContainer = GameManager.Instance.cellContainer;
-        GameManager.Instance.SetupBoard += OnSetupBoard;
+
+
     }
 
-    private void OnSetupBoard(int size)
-    {
+    public void SetupBoard(int size)
+    {        
+        cellPrefab = GameManager.Instance.cellPrefab;
+        cellContainer = GameManager.Instance.cellContainer;
         Size = size;
     }
     
@@ -49,5 +50,14 @@ public class Board : MonoBehaviour
                 cells[x, y] = cell;
             }
         }
+    }
+
+    public Cell GetCell(int x, int y)
+    {
+        if (x >= 0 && x < size && y >= 0 && y < size)
+        {
+            return cells[x, y];
+        }
+        return null;
     }
 }

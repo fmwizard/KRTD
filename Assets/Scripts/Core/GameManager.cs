@@ -55,12 +55,11 @@ public class GameManager : MonoBehaviour
     {
         GameObject boardObject = new GameObject("Board");
         board = boardObject.AddComponent<Board>();
-        SetupBoard?.Invoke(boardSize);
+        board.SetupBoard(boardSize);
     }
     private void InitPlayers()
     {
         playerX = new HumanPlayer(CellMark.X, "Player X");
-        playerO = new AIPlayer(CellMark.O, Difficulty.Medium);
         currentPlayer = playerX;
     }
 
@@ -82,7 +81,19 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            // Wait for human player input
+            // Wait for human player input 
+        }
+    }
+
+    public void OnCellClicked(int x, int y)
+    {
+        if (gameState == GameState.InProgress && !isAITurn)
+        {
+            Cell cell = board.GetCell(x, y);
+            if (cell && cell.CellMark == CellMark.Empty)
+            {
+                cell.CellMark = currentPlayer.PlayerMark;
+            }
         }
     }
 }

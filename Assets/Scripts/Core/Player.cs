@@ -36,10 +36,3 @@ public class HumanPlayer : Player
         PlayerType = PlayerType.HumanPlayer;
     }
 }
-
-public class AIPlayer : Player
-{
-    private Board board;
-    private Difficulty difficulty;
-    private AIStrategy aiStrategy;
-}
