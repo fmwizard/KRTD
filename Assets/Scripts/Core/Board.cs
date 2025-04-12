@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Board : MonoBehaviour
 {
-    [SerializeField] private GameObject cellPrefab;
-    [SerializeField] private GameObject cellContainer;
+    private GameObject cellPrefab;
+    private GameObject cellContainer;
     private int size;
     public int Size
     {
@@ -20,6 +20,8 @@ public class Board : MonoBehaviour
 
     void Start()
     {
+        cellPrefab = GameManager.Instance.cellPrefab;
+        cellContainer = GameManager.Instance.cellContainer;
         GameManager.Instance.SetupBoard += OnSetupBoard;
     }
 

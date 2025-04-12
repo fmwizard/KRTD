@@ -2,18 +2,44 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player 
+public abstract class Player 
 {
     private CellMark playerMark;
-    public string playerName;
-    public Player(string name, CellMark mark)
-    {
-        playerName = name;
-        playerMark = mark;
-    }
+    private PlayerType playerType;
     public CellMark PlayerMark
     {
         get { return playerMark; }
         set { playerMark = value; }
     }
+    public PlayerType PlayerType
+    {
+        get { return playerType; }
+        set { playerType = value; }
+    }
+    public Player(CellMark mark)
+    {
+        playerMark = mark;
+    }
+}
+
+public class HumanPlayer : Player
+{
+    private string playerName;
+    public string PlayerName
+    {
+        get { return playerName; }
+        set { playerName = value; }
+    }
+    public HumanPlayer(CellMark mark, string name) : base(mark)
+    {
+        playerName = name;
+        PlayerType = PlayerType.HumanPlayer;
+    }
+}
+
+public class AIPlayer : Player
+{
+    private Board board;
+    private Difficulty difficulty;
+    private AIStrategy aiStrategy;
 }
