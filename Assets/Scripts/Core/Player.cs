@@ -36,3 +36,38 @@ public class HumanPlayer : Player
         PlayerType = PlayerType.HumanPlayer;
     }
 }
+
+public class AIPlayer : Player
+{
+    private Difficulty difficulty;
+    private Board board;
+    private RuleSystem ruleSystem;
+    private StrategySystem StrategySystem;
+
+    public AIPlayer(CellMark mark, Difficulty difficulty, Board board, RuleSystem ruleSystem) : base(mark)
+    {
+        this.difficulty = difficulty;
+        this.board = board;
+        this.ruleSystem = ruleSystem;
+        PlayerType = PlayerType.AIPlayer;
+        ChooseStrategy();
+    }
+
+    private void ChooseStrategy()
+    {
+        switch (difficulty)
+        {
+            case Difficulty.Easy:
+                StrategySystem = new EasyStrategy();
+                break;
+            case Difficulty.Medium:
+                StrategySystem = new MediumStrategy();
+                break;
+        }
+    }
+
+    public Vector2Int GetNextMove()
+    {
+        return StrategySystem.GetNextMove(board, PlayerMark, ruleSystem);
+    }
+}

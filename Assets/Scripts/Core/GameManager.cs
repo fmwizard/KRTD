@@ -61,7 +61,7 @@ public class GameManager : MonoBehaviour
     private void InitPlayers()
     {
         playerX = new HumanPlayer(CellMark.X, "Player X");
-        playerO = new HumanPlayer(CellMark.O, "Player O");
+        playerO = new AIPlayer(CellMark.O, Difficulty.Medium, board, ruleSystem);
         currentPlayer = playerX;
     }
     private void InitRuleSystem()
@@ -72,9 +72,9 @@ public class GameManager : MonoBehaviour
     private void LaunchGame()
     {
         gameState = GameState.Setup;
-        InitBoard();
-        InitPlayers();
+        InitBoard();        
         InitRuleSystem();
+        InitPlayers();
         currentPlayer = playerX;
         isAITurn = currentPlayer.PlayerType == PlayerType.AIPlayer;
         gameState = GameState.InProgress;
@@ -84,7 +84,16 @@ public class GameManager : MonoBehaviour
     {
         if (isAITurn)
         {
-            // AI logic to make a move
+            AIPlayer aiPlayer = currentPlayer as AIPlayer;
+            Vector2Int move = aiPlayer.GetNextMove();
+            if (move.x != -1 && move.y != -1)
+            {
+                MakeMove(move.x, move.y);
+            }
+            else
+            {
+                Debug.Log("No valid move available.");
+            }
         }
         else
         {
@@ -97,25 +106,36 @@ public class GameManager : MonoBehaviour
         currentPlayer = currentPlayer == playerX ? playerO : playerX;
         isAITurn = currentPlayer.PlayerType == PlayerType.AIPlayer;
     }
+
+    private void MakeMove(int x, int y)
+    {
+        Cell cell = board.GetCell(x, y);
+        if (cell && cell.CellMark == CellMark.Empty)
+        {
+            board.SetCell(x, y, currentPlayer.PlayerMark);
+            if (ruleSystem.CheckWinCondition(board, currentPlayer.PlayerMark))
+            {
+                gameState = GameState.Finished;
+                Debug.Log($"{currentPlayer.PlayerMark} wins!");
+            }
+            else if (board.IsBoardFull())
+            {
+                gameState = GameState.Finished;
+                Debug.Log("It's a draw!");
+            }
+            else
+            {
+                SwitchPlayer();
+            }
+        }
+    }
     
     public void OnCellClicked(int x, int y)
     {
         if (gameState == GameState.InProgress && !isAITurn)
         {
-            Cell cell = board.GetCell(x, y);
-            if (cell && cell.CellMark == CellMark.Empty)
-            {
-                cell.CellMark = currentPlayer.PlayerMark;
-                if (ruleSystem.CheckWinCondition(board, currentPlayer.PlayerMark))
-                {
-                    gameState = GameState.Finished;
-                    Debug.Log($"{currentPlayer.PlayerMark} wins!");
-                }
-                else
-                {
-                    SwitchPlayer();
-                }
-            }
+            MakeMove(x, y);
+
         }
     }
 }

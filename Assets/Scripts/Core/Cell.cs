@@ -17,7 +17,6 @@ public class Cell : MonoBehaviour
         set
         {
             cellMark = value;
-            UpdateCellSprite();
         }
     }
 
@@ -44,6 +43,7 @@ public class Cell : MonoBehaviour
         this.x = x;
         this.y = y;
         CellMark = CellMark.Empty;
+        UpdateCellSprite();
         button.onClick.RemoveAllListeners();
         button.onClick.AddListener(OnCellClicked);
     }
@@ -56,7 +56,7 @@ public class Cell : MonoBehaviour
         }
     }
 
-    private void UpdateCellSprite()
+    public void UpdateCellSprite()
     {
         switch (cellMark)
         {

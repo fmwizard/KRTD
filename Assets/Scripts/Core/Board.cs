@@ -60,4 +60,44 @@ public class Board : MonoBehaviour
         }
         return null;
     }
+
+    public void SetCell(int x, int y, CellMark mark, bool updateUI = true)
+    {
+        if (x >= 0 && x < size && y >= 0 && y < size)
+        {
+            cells[x, y].CellMark = mark;
+            if (updateUI)
+            {
+                cells[x, y].UpdateCellSprite();
+            }
+        }
+    }
+
+    public List<Vector2Int> GetAllEmptyCells()
+    {
+        List<Vector2Int> emptyCells = new List<Vector2Int>();
+        for (int x = 0; x < size; x++)
+        {
+            for (int y = 0; y < size; y++)
+            {
+                if (cells[x, y].CellMark == CellMark.Empty)
+                {
+                    emptyCells.Add(new Vector2Int(x, y));
+                }
+            }
+        }
+        return emptyCells;
+    }
+
+    public bool IsBoardFull()
+    {
+        foreach (Cell cell in cells)
+        {
+            if (cell.CellMark == CellMark.Empty)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
 }
