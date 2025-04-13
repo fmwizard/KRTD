@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
 
     private GameState gameState;
     private bool isAITurn;
+    private RuleSystem ruleSystem;
 
     private Player playerX;
     private Player playerO;
@@ -60,7 +61,12 @@ public class GameManager : MonoBehaviour
     private void InitPlayers()
     {
         playerX = new HumanPlayer(CellMark.X, "Player X");
+        playerO = new HumanPlayer(CellMark.O, "Player O");
         currentPlayer = playerX;
+    }
+    private void InitRuleSystem()
+    {
+        ruleSystem = new RuleSystem(boardSize, boardSize);
     }
 
     private void LaunchGame()
@@ -68,6 +74,7 @@ public class GameManager : MonoBehaviour
         gameState = GameState.Setup;
         InitBoard();
         InitPlayers();
+        InitRuleSystem();
         currentPlayer = playerX;
         isAITurn = currentPlayer.PlayerType == PlayerType.AIPlayer;
         gameState = GameState.InProgress;
@@ -85,6 +92,12 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private void SwitchPlayer()
+    {
+        currentPlayer = currentPlayer == playerX ? playerO : playerX;
+        isAITurn = currentPlayer.PlayerType == PlayerType.AIPlayer;
+    }
+    
     public void OnCellClicked(int x, int y)
     {
         if (gameState == GameState.InProgress && !isAITurn)
@@ -93,6 +106,15 @@ public class GameManager : MonoBehaviour
             if (cell && cell.CellMark == CellMark.Empty)
             {
                 cell.CellMark = currentPlayer.PlayerMark;
+                if (ruleSystem.CheckWinCondition(board, currentPlayer.PlayerMark))
+                {
+                    gameState = GameState.Finished;
+                    Debug.Log($"{currentPlayer.PlayerMark} wins!");
+                }
+                else
+                {
+                    SwitchPlayer();
+                }
             }
         }
     }
