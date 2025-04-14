@@ -79,8 +79,7 @@ public class GameManager : MonoBehaviour
     }
 
     public void LaunchGame()
-    {
-        gameState = GameState.Setup;        
+    { 
         uiManager.ShowPanel(uiManager.gamePanel);
         InitBoard();        
         InitRuleSystem();

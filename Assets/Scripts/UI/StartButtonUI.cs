@@ -14,6 +14,6 @@ public class StartButtonUI : MonoBehaviour
     
     private void OnStartButtonClicked()
     {
-        GameManager.Instance.LaunchGame();
+        UIManager.Instance.ShowPanel(UIManager.Instance.settingPanel);
     }
 }
