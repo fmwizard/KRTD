@@ -60,8 +60,11 @@ public class AIPlayer : Player
             case Difficulty.Easy:
                 StrategySystem = new EasyStrategy();
                 break;
-            case Difficulty.Medium:
-                StrategySystem = new MediumStrategy();
+            // case Difficulty.Medium:
+            //     StrategySystem = new MediumStrategy();
+            //     break;
+            case Difficulty.Hard:
+                StrategySystem = new HardStrategy();
                 break;
         }
     }

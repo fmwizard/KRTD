@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
 public class UIManager : MonoBehaviour
 {
     public static UIManager Instance { get; private set; }
@@ -51,6 +51,13 @@ public class UIManager : MonoBehaviour
         gamePanel.SetActive(false);
         settingPanel.SetActive(false);
         panel.SetActive(true);
+    }
+
+    public void SetGameBoardUI(int size)
+    {
+        GridLayoutGroup gridLayout = gamePanel.GetComponent<GridLayoutGroup>();
+        float cellLength = gamePanel.GetComponent<RectTransform>().rect.width - (size - 1) * gridLayout.spacing.x;
+        gridLayout.cellSize = new Vector2(cellLength / size, cellLength / size);
     }
 
     public void ShowPausePanel(bool show)

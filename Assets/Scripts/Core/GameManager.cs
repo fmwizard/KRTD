@@ -61,6 +61,7 @@ public class GameManager : MonoBehaviour
         GameObject boardObject = new GameObject("Board");
         board = boardObject.AddComponent<Board>();
         board.SetupBoard(boardSize);
+        UIManager.Instance.SetGameBoardUI(boardSize);
     }
 
     private void InitPlayers(PlayerSetting playerSettingX, PlayerSetting playerSettingO)
