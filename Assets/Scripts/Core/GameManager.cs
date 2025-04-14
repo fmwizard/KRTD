@@ -12,7 +12,7 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance { get; private set; }
     public Action<int> SetupBoard;
 
-    private GameState gameState;
+    public GameState gameState;
     private bool isAITurn;
     private RuleSystem ruleSystem;
 
@@ -37,11 +37,11 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         }
         gameState = GameState.Setup;
-        uiManager = UIManager.Instance;
     }
     // Start is called before the first frame update
     void Start()
-    {
+    {        
+        uiManager = UIManager.Instance;
         EnterMainMenu();
         
     }
@@ -52,19 +52,6 @@ public class GameManager : MonoBehaviour
         if (gameState == GameState.InProgress)
         {
             HandlePlayerTurn();
-        }
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            TogglePause();
-        }
-    }
-
-    private void TogglePause()
-    {
-        if (gameState == GameState.InProgress)
-        {
-            gameState = GameState.Setup;
-            uiManager.ShowPanel(uiManager.pausePanel);
         }
 
     }
@@ -117,6 +104,17 @@ public class GameManager : MonoBehaviour
         currentPlayer = playerX;
         isAITurn = currentPlayer.PlayerType == PlayerType.AIPlayer;
         gameState = GameState.InProgress;
+    }
+
+    public void EndGame()
+    {
+        gameState = GameState.Setup;
+        Destroy(board.gameObject);
+        board = null;
+        ruleSystem = null;
+        playerX = null;
+        playerO = null;
+        currentPlayer = null;
     }
 
     private void HandlePlayerTurn()

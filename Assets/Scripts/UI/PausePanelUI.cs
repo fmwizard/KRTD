@@ -10,7 +10,7 @@ public class PausePanelUI : MonoBehaviour
     void Start()
     {
         backToMenuButton.onClick.AddListener(OnBackToMenuButtonClicked);
-        
+        quitButton.onClick.AddListener(OnQuitButtonClicked);
     }
 
     // Update is called once per frame
@@ -21,6 +21,21 @@ public class PausePanelUI : MonoBehaviour
 
     public void OnBackToMenuButtonClicked()
     {
+        UIManager.Instance.TogglePause();
+        GameManager gmInstance = GameManager.Instance;
+        if (gmInstance.gameState == GameState.InProgress)
+        {
+            gmInstance.EndGame();
+        }
         UIManager.Instance.ShowPanel(UIManager.Instance.menuPanel);
+    }
+
+    public void OnQuitButtonClicked()
+    {
+    #if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+    #else
+        Application.Quit();
+    #endif
     }
 }
