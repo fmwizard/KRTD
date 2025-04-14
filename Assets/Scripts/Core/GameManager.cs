@@ -11,7 +11,6 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
     public Action<int> SetupBoard;
-    public int boardSize = 3;
 
     private GameState gameState;
     private bool isAITurn;
@@ -55,21 +54,37 @@ public class GameManager : MonoBehaviour
             HandlePlayerTurn();
         }
     }
-    private void InitBoard()
+    private void InitBoard(int boardSize)
     {
         GameObject boardObject = new GameObject("Board");
         board = boardObject.AddComponent<Board>();
         board.SetupBoard(boardSize);
     }
-    private void InitPlayers()
+
+    private void InitPlayers(PlayerSetting playerSettingX, PlayerSetting playerSettingO)
     {
-        playerX = new HumanPlayer(CellMark.X, "Player X");
-        playerO = new AIPlayer(CellMark.O, Difficulty.Medium, board, ruleSystem);
+        if (playerSettingX.playerType == PlayerType.HumanPlayer)
+        {
+            playerX = new HumanPlayer(CellMark.X, playerSettingX.playerName);
+        }
+        else
+        {
+            playerX = new AIPlayer(CellMark.X, playerSettingX.difficulty, board, ruleSystem);
+        }
+        if (playerSettingO.playerType == PlayerType.HumanPlayer)
+        {
+            playerO = new HumanPlayer(CellMark.O, playerSettingO.playerName);
+        }
+        else
+        {
+            playerO = new AIPlayer(CellMark.O, playerSettingO.difficulty, board, ruleSystem);
+        }
         currentPlayer = playerX;
     }
-    private void InitRuleSystem()
+
+    private void InitRuleSystem(int boardSize, int winCondition)
     {
-        ruleSystem = new RuleSystem(boardSize, boardSize);
+        ruleSystem = new RuleSystem(boardSize, winCondition);
     }
 
     private void EnterMainMenu()
@@ -78,12 +93,12 @@ public class GameManager : MonoBehaviour
         uiManager.ShowPanel(uiManager.menuPanel);
     }
 
-    public void LaunchGame()
+    public void LaunchGame(GameSetting gameSetting)
     { 
         uiManager.ShowPanel(uiManager.gamePanel);
-        InitBoard();        
-        InitRuleSystem();
-        InitPlayers();
+        InitBoard(gameSetting.boardSize);
+        InitRuleSystem(gameSetting.boardSize, gameSetting.winCondition);
+        InitPlayers(gameSetting.playerX, gameSetting.playerO);
         currentPlayer = playerX;
         isAITurn = currentPlayer.PlayerType == PlayerType.AIPlayer;
         gameState = GameState.InProgress;
