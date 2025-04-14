@@ -5,7 +5,7 @@ using UnityEngine;
 public class UIManager : MonoBehaviour
 {
     public static UIManager Instance { get; private set; }
-    public GameObject menuPanel, settingPanel, gamePanel, gameOverPanel;
+    public GameObject menuPanel, settingPanel, gamePanel, gameOverPanel, pausePanel;
     void Awake()
     {
         if (Instance == null)
@@ -34,6 +34,7 @@ public class UIManager : MonoBehaviour
         menuPanel.SetActive(false);
         gamePanel.SetActive(false);
         settingPanel.SetActive(false);
+        pausePanel.SetActive(false);
         panel.SetActive(true);
     }
 }

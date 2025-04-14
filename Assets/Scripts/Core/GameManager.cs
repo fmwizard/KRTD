@@ -53,7 +53,22 @@ public class GameManager : MonoBehaviour
         {
             HandlePlayerTurn();
         }
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            TogglePause();
+        }
     }
+
+    private void TogglePause()
+    {
+        if (gameState == GameState.InProgress)
+        {
+            gameState = GameState.Setup;
+            uiManager.ShowPanel(uiManager.pausePanel);
+        }
+
+    }
+
     private void InitBoard(int boardSize)
     {
         GameObject boardObject = new GameObject("Board");
