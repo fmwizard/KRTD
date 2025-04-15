@@ -66,7 +66,7 @@ public class DataManager : MonoBehaviour
             dbConnection.Update(player);
         }
     }
-    public void InsertGameRecord(int player1Id, int player2Id, int winnerId, string datetime, string moves)
+    public void InsertGameRecord(int player1Id, int player2Id, int winnerId, string datetime, int boardSize, int winCondition, string moves)
     {
         GameTable game = new GameTable
         {
@@ -74,6 +74,8 @@ public class DataManager : MonoBehaviour
             Player2Id = player2Id,
             WinnerId = winnerId,
             Datetime = datetime,
+            BoardSize = boardSize,
+            WinCondition = winCondition,
             Moves = moves
         };
         dbConnection.Insert(game);
@@ -125,5 +127,7 @@ public class GameTable
     public int Player2Id { get; set; }
     public int WinnerId { get; set; }
     public string Datetime { get; set; }
+    public int BoardSize { get; set; }
+    public int WinCondition { get; set; }
     public string Moves { get; set; }
 }
