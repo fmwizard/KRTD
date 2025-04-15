@@ -1,0 +1,98 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using SQLite4Unity3d;
+using System.Linq;
+public class DataManager : MonoBehaviour
+{
+    public static DataManager Instance { get; private set; }
+    public SQLiteConnection dbConnection;
+
+    void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+        string dbPath = System.IO.Path.Combine(Application.streamingAssetsPath, "data.db");
+        dbConnection = new SQLiteConnection(dbPath);
+        CreateTables();
+    }
+    // Start is called before the first frame update
+    void Start()
+    {
+        
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        
+    }
+
+    public void CreateTables()
+    {
+        dbConnection.CreateTable<PlayerTable>();
+        dbConnection.CreateTable<GameTable>();
+    }
+
+    public void InsertPlayerRecord(string name, int wins, int losses, int draws)
+    {
+        PlayerTable player = new PlayerTable
+        {
+            Name = name,
+            Wins = wins,
+            Losses = losses,
+            Draws = draws
+        };
+        dbConnection.Insert(player);
+    }
+
+    public void InsertGameRecord(int player1Id, int player2Id, int winnerId, string datetime, string moves)
+    {
+        GameTable game = new GameTable
+        {
+            Player1Id = player1Id,
+            Player2Id = player2Id,
+            WinnerId = winnerId,
+            Datetime = datetime,
+            Moves = moves
+        };
+        dbConnection.Insert(game);
+    }
+
+    public PlayerTable GetPlayerRecordByName(string name)
+    {
+        return dbConnection.Table<PlayerTable>().FirstOrDefault(p => p.Name == name);
+    }
+
+    public List<GameTable> GetGameRecordsByPlayerId(int playerId)
+    {
+        return dbConnection.Table<GameTable>().Where(g => g.Player1Id == playerId || g.Player2Id == playerId).ToList();
+    }
+}
+
+public class PlayerTable
+{
+    [PrimaryKey, AutoIncrement]
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public int Wins { get; set; }
+    public int Losses { get; set; }
+    public int Draws { get; set; }
+}
+
+public class GameTable
+{
+    [PrimaryKey, AutoIncrement]
+    public int Id { get; set; }
+    public int Player1Id { get; set; }
+    public int Player2Id { get; set; }
+    public int WinnerId { get; set; }
+    public string Datetime { get; set; }
+    public string Moves { get; set; }
+}
