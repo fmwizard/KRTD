@@ -7,6 +7,9 @@ public class UIManager : MonoBehaviour
     public static UIManager Instance { get; private set; }
     private bool isPaused = false;
     public GameObject menuPanel, settingPanel, rankPanel, gamePanel, gameOverPanel, pausePanel;
+    public GameObject rankContainer;
+    public GameObject playerRecordPrefab;
+    public GameObject rankTitlePrefab;
     void Awake()
     {
         if (Instance == null)
@@ -70,6 +73,36 @@ public class UIManager : MonoBehaviour
         else
         {
             pausePanel.SetActive(false);
+        }
+    }
+
+    public void ShowRankPanel()
+    {
+        ClearRankPanel();
+        DataManager instance = DataManager.Instance;
+        List<PlayerTable> players = instance.GetAllPlayerRecords();
+        // rank by score
+        if (players.Count > 0)
+        {
+            players.Sort((x, y) => instance.CalculateScore(y).CompareTo(instance.CalculateScore(x)));
+        }
+        Instantiate(rankTitlePrefab, rankContainer.transform);
+        for (int i = 0; i < players.Count; i++)
+        {
+            PlayerTable player = players[i];
+            GameObject playerRecord = Instantiate(playerRecordPrefab, rankContainer.transform);
+            PlayerRecordUI playerRecordUI = playerRecord.GetComponent<PlayerRecordUI>();
+            playerRecordUI.SetPlayerRecord(i + 1, player);
+        }
+        ShowPanel(rankPanel);
+    }
+
+
+    public void ClearRankPanel()
+    {
+        foreach (Transform child in rankContainer.transform)
+        {
+            Destroy(child.gameObject);
         }
     }
 }

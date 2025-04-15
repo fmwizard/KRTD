@@ -110,7 +110,7 @@ public class GameManager : MonoBehaviour
     private void EnterMainMenu()
     {
         gameState = GameState.Setup;
-        uiManager.ShowPanel(uiManager.rankPanel);
+        uiManager.ShowRankPanel();
     }
 
     public void LaunchGame(GameSetting gameSetting)

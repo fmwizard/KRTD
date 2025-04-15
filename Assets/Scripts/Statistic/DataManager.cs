@@ -92,10 +92,18 @@ public class DataManager : MonoBehaviour
         }
         return -1;
     }
-
+    public List<PlayerTable> GetAllPlayerRecords()
+    {
+        return dbConnection.Table<PlayerTable>().ToList();
+    }
     public List<GameTable> GetGameRecordsByPlayerId(int playerId)
     {
         return dbConnection.Table<GameTable>().Where(g => g.Player1Id == playerId || g.Player2Id == playerId).ToList();
+    }
+
+    public int CalculateScore(PlayerTable player)
+    {
+        return player.Wins * 3 + player.Draws;
     }
 }
 
