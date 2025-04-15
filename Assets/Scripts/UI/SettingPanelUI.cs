@@ -13,12 +13,13 @@ public class SettingPanelUI : MonoBehaviour
     public GameObject player1AIOption;
     public GameObject player2HumanOption;
     public GameObject player2AIOption;
+    public TextMeshProUGUI errorPrompt;
     public Button launchButton;
 
     // Start is called before the first frame update
     void Start()
     {
-
+        errorPrompt.gameObject.SetActive(false);
         launchButton.onClick.AddListener(OnLaunchButtonClick);
 
     }
@@ -88,8 +89,16 @@ public class SettingPanelUI : MonoBehaviour
         (int size, int winCondition) = ParseBoardDropdown();
         PlayerSetting playerX = ParsePlayerContainer(player1ToggleGroup, player1HumanOption, player1AIOption);
         PlayerSetting playerO = ParsePlayerContainer(player2ToggleGroup, player2HumanOption, player2AIOption);
-
+        if (playerX.playerType == PlayerType.HumanPlayer && playerO.playerType == PlayerType.HumanPlayer)
+        {
+            if (playerX.playerName == playerO.playerName)
+            {
+                errorPrompt.gameObject.SetActive(true);
+                return;
+            }
+        }
         GameSetting gameSetting = new GameSetting(size, winCondition, playerX, playerO);
         GameManager.Instance.LaunchGame(gameSetting);
+        errorPrompt.gameObject.SetActive(false);
     }
 }
