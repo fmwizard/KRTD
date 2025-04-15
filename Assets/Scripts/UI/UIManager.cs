@@ -6,7 +6,7 @@ public class UIManager : MonoBehaviour
 {
     public static UIManager Instance { get; private set; }
     private bool isPaused = false;
-    public GameObject menuPanel, settingPanel, gamePanel, gameOverPanel, pausePanel;
+    public GameObject menuPanel, settingPanel, rankPanel, gamePanel, gameOverPanel, pausePanel;
     void Awake()
     {
         if (Instance == null)
@@ -50,6 +50,7 @@ public class UIManager : MonoBehaviour
         menuPanel.SetActive(false);
         gamePanel.SetActive(false);
         settingPanel.SetActive(false);
+        rankPanel.SetActive(false);
         panel.SetActive(true);
     }
 
