@@ -20,12 +20,14 @@ public class DataManager : MonoBehaviour
         }
         string dbPath = System.IO.Path.Combine(Application.streamingAssetsPath, "data.db");
         dbConnection = new SQLiteConnection(dbPath);
-        CreateTables();
+        //CreateTables();
+        //dbConnection.DropTable<PlayerTable>();
+        //dbConnection.DropTable<GameTable>();
     }
     // Start is called before the first frame update
     void Start()
     {
-        
+        //int a = InsertPlayerRecord("AI", 0, 0, 0);
     }
 
     // Update is called once per frame
@@ -40,7 +42,7 @@ public class DataManager : MonoBehaviour
         dbConnection.CreateTable<GameTable>();
     }
 
-    public void InsertPlayerRecord(string name, int wins, int losses, int draws)
+    public int InsertPlayerRecord(string name, int wins, int losses, int draws)
     {
         PlayerTable player = new PlayerTable
         {
@@ -50,8 +52,20 @@ public class DataManager : MonoBehaviour
             Draws = draws
         };
         dbConnection.Insert(player);
+        return player.Id;
     }
 
+    public void UpdatePlayerRecord(int playerId, int wins, int losses, int draws)
+    {
+        PlayerTable player = dbConnection.Table<PlayerTable>().FirstOrDefault(p => p.Id == playerId);
+        if (player != null)
+        {
+            player.Wins = wins;
+            player.Losses = losses;
+            player.Draws = draws;
+            dbConnection.Update(player);
+        }
+    }
     public void InsertGameRecord(int player1Id, int player2Id, int winnerId, string datetime, string moves)
     {
         GameTable game = new GameTable
@@ -65,9 +79,18 @@ public class DataManager : MonoBehaviour
         dbConnection.Insert(game);
     }
 
-    public PlayerTable GetPlayerRecordByName(string name)
+    public PlayerTable GetPlayerRecordById(int playerId)
     {
-        return dbConnection.Table<PlayerTable>().FirstOrDefault(p => p.Name == name);
+        return dbConnection.Table<PlayerTable>().FirstOrDefault(p => p.Id == playerId);
+    }
+    public int GetPlayerIDByName(string name)
+    {
+        PlayerTable player = dbConnection.Table<PlayerTable>().FirstOrDefault(p => p.Name == name);
+        if (player != null)
+        {
+            return player.Id;
+        }
+        return -1;
     }
 
     public List<GameTable> GetGameRecordsByPlayerId(int playerId)

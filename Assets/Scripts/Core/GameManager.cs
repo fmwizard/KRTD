@@ -19,10 +19,13 @@ public class GameManager : MonoBehaviour
     private UIManager uiManager;
 
     private Player playerX;
+    private int playerXID;
     private Player playerO;
+    private int playerOID;
     private Player currentPlayer;
 
     private Board board;
+    private string moveSequence;
     public GameObject cellPrefab;
     public GameObject cellContainer;
 
@@ -69,18 +72,32 @@ public class GameManager : MonoBehaviour
         if (playerSettingX.playerType == PlayerType.HumanPlayer)
         {
             playerX = new HumanPlayer(CellMark.X, playerSettingX.playerName);
+            int id = DataManager.Instance.GetPlayerIDByName(playerSettingX.playerName);
+            if (id == -1)
+            {
+                id = DataManager.Instance.InsertPlayerRecord(playerSettingX.playerName, 0, 0, 0);
+            }
+            playerXID = id;
         }
         else
         {
             playerX = new AIPlayer(CellMark.X, playerSettingX.difficulty, board, ruleSystem);
+            playerXID = 1; // AI player ID
         }
         if (playerSettingO.playerType == PlayerType.HumanPlayer)
         {
             playerO = new HumanPlayer(CellMark.O, playerSettingO.playerName);
+            int id = DataManager.Instance.GetPlayerIDByName(playerSettingO.playerName);
+            if (id == -1)
+            {
+                id = DataManager.Instance.InsertPlayerRecord(playerSettingO.playerName, 0, 0, 0);
+            }
+            playerOID = id;
         }
         else
         {
             playerO = new AIPlayer(CellMark.O, playerSettingO.difficulty, board, ruleSystem);
+            playerOID = 1; // AI player ID
         }
         currentPlayer = playerX;
     }
@@ -103,6 +120,7 @@ public class GameManager : MonoBehaviour
         InitRuleSystem(gameSetting.boardSize, gameSetting.winCondition);
         InitPlayers(gameSetting.playerX, gameSetting.playerO);
         currentPlayer = playerX;
+        moveSequence = "";
         isAITurn = currentPlayer.PlayerType == PlayerType.AIPlayer;
         gameState = GameState.InProgress;
     }
@@ -154,15 +172,31 @@ public class GameManager : MonoBehaviour
             if (ruleSystem.CheckWinCondition(board, currentPlayer.PlayerMark))
             {
                 gameState = GameState.Finished;
+                moveSequence += $"{x},{y}";
+                int winnerId = currentPlayer == playerX ? playerXID : playerOID;
+                int loserId = currentPlayer == playerX ? playerOID : playerXID;
+                PlayerTable winner = DataManager.Instance.GetPlayerRecordById(winnerId);
+                PlayerTable loser = DataManager.Instance.GetPlayerRecordById(loserId);
+                DataManager.Instance.InsertGameRecord(playerXID, playerOID, winnerId, DateTime.Now.ToString(), moveSequence);
+                DataManager.Instance.UpdatePlayerRecord(winnerId, winner.Wins + 1, winner.Losses, winner.Draws);
+                DataManager.Instance.UpdatePlayerRecord(loserId, loser.Wins, loser.Losses + 1, loser.Draws);
                 Debug.Log($"{currentPlayer.PlayerMark} wins!");
             }
             else if (board.IsBoardFull())
             {
                 gameState = GameState.Finished;
+                moveSequence += $"{x},{y}";
+                int winnerId = -1; // Draw
+                PlayerTable playerX = DataManager.Instance.GetPlayerRecordById(playerXID);
+                PlayerTable playerO = DataManager.Instance.GetPlayerRecordById(playerOID);
+                DataManager.Instance.InsertGameRecord(playerXID, playerOID, winnerId, DateTime.Now.ToString(), moveSequence);
+                DataManager.Instance.UpdatePlayerRecord(playerXID, playerX.Wins, playerX.Losses, playerX.Draws + 1);
+                DataManager.Instance.UpdatePlayerRecord(playerOID, playerO.Wins, playerO.Losses, playerO.Draws + 1);
                 Debug.Log("It's a draw!");
             }
             else
-            {
+            {            
+                moveSequence += $"{x},{y}-";
                 SwitchPlayer();
             }
         }
