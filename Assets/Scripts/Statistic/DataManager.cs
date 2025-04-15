@@ -94,6 +94,15 @@ public class DataManager : MonoBehaviour
         }
         return -1;
     }
+    public string GetPlayerNameById(int playerId)
+    {
+        PlayerTable player = dbConnection.Table<PlayerTable>().FirstOrDefault(p => p.Id == playerId);
+        if (player != null)
+        {
+            return player.Name;
+        }
+        return null;
+    }
     public List<PlayerTable> GetAllPlayerRecords()
     {
         return dbConnection.Table<PlayerTable>().ToList();

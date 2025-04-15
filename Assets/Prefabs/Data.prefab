@@ -599,6 +599,7 @@ MonoBehaviour:
   losses: {fileID: 2260289146530660806}
   draws: {fileID: 3697488410014237196}
   score: {fileID: 7616854804253036530}
+  recordButton: {fileID: 1725847317918221746}
 --- !u!1 &3566898779183419782
 GameObject:
   m_ObjectHideFlags: 0
@@ -688,7 +689,7 @@ GameObject:
   - component: {fileID: 4031429228663762930}
   - component: {fileID: 1725847317918221746}
   m_Layer: 5
-  m_Name: Button (1)
+  m_Name: DetailButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1152,7 +1153,7 @@ GameObject:
   - component: {fileID: 7558401458244131907}
   - component: {fileID: 2986608223205580341}
   m_Layer: 5
-  m_Name: DetailButton
+  m_Name: Detail
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

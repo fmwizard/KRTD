@@ -6,10 +6,15 @@ public class UIManager : MonoBehaviour
 {
     public static UIManager Instance { get; private set; }
     private bool isPaused = false;
-    public GameObject menuPanel, settingPanel, rankPanel, gamePanel, gameOverPanel, pausePanel;
+    public GameObject menuPanel, settingPanel, rankPanel, recordPanel, 
+        gamePanel, gameOverPanel, pausePanel;
     public GameObject rankContainer;
     public GameObject playerRecordPrefab;
     public GameObject rankTitlePrefab;
+    public GameObject recordContainer;
+    public GameObject recordEntryPrefab;
+    public GameObject recordTitlePrefab;
+
     void Awake()
     {
         if (Instance == null)
@@ -90,6 +95,10 @@ public class UIManager : MonoBehaviour
         for (int i = 0; i < players.Count; i++)
         {
             PlayerTable player = players[i];
+            // if (player.Name == "AI")
+            // {
+            //     continue;
+            // }
             GameObject playerRecord = Instantiate(playerRecordPrefab, rankContainer.transform);
             PlayerRecordUI playerRecordUI = playerRecord.GetComponent<PlayerRecordUI>();
             playerRecordUI.SetPlayerRecord(i + 1, player);
@@ -97,10 +106,33 @@ public class UIManager : MonoBehaviour
         ShowPanel(rankPanel);
     }
 
-
     public void ClearRankPanel()
     {
         foreach (Transform child in rankContainer.transform)
+        {
+            Destroy(child.gameObject);
+        }
+    }
+
+    public void ShowRecordPanel(PlayerTable player)
+    {
+        ClearRecordPanel();
+        DataManager instance = DataManager.Instance;
+        List<GameTable> records = instance.GetGameRecordsByPlayerId(player.Id);
+        Instantiate(recordTitlePrefab, recordContainer.transform);
+        for (int i = 0; i < records.Count; i++)
+        {
+            GameTable record = records[i];
+            GameObject recordEntry = Instantiate(recordEntryPrefab, recordContainer.transform);
+            RecordEntryUI recordEntryUI = recordEntry.GetComponent<RecordEntryUI>();
+            recordEntryUI.SetRecordEntry(record, player);
+        }
+        ShowPanel(recordPanel);
+    }
+
+    public void ClearRecordPanel()
+    {
+        foreach (Transform child in recordContainer.transform)
         {
             Destroy(child.gameObject);
         }
