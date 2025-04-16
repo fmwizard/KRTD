@@ -114,7 +114,7 @@ public class GameManager : MonoBehaviour
     private void EnterMainMenu()
     {
         gameState = GameState.Setup;
-        uiManager.ShowPanel(uiManager.menuPanel);
+        uiManager.ShowRankPanel();
     }
 
     public void LaunchGame(GameSetting gameSetting)
@@ -127,6 +127,30 @@ public class GameManager : MonoBehaviour
         moveSequence = "";
         isAITurn = currentPlayer.PlayerType == PlayerType.AIPlayer;
         gameState = GameState.InProgress;
+    }
+
+    public void ReplayGame(GameTable game)
+    {
+        uiManager.ShowPanel(uiManager.gamePanel);
+        InitBoard(game.BoardSize);
+        moveSequence = game.Moves;
+        gameState = GameState.InProgress;
+        StartCoroutine(ReplaySequence(moveSequence));
+    }
+
+    private IEnumerator ReplaySequence(string sequence)
+    {
+        string[] moves = sequence.Split('-');
+        for (int i = 0; i < moves.Length; i++)
+        {
+            string[] coords = moves[i].Split(',');
+            int x = int.Parse(coords[0]);
+            int y = int.Parse(coords[1]);
+            CellMark mark = i % 2 == 0 ? CellMark.X : CellMark.O;
+            board.SetCell(x, y, mark);
+            yield return new WaitForSeconds(1f);
+        }
+        Debug.Log("Replay finished.");
     }
 
     public void EndGame()

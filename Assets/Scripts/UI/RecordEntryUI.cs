@@ -18,6 +18,15 @@ public class RecordEntryUI : MonoBehaviour
         type.text = game.Player1Id == queryPlayer.Id ? "先手(X)" : "后手(O)";
         result.text = game.WinnerId == queryPlayer.Id ? "胜" : game.WinnerId == -1 ? "平" : "负";
         datetime.text = game.Datetime;
+        SetReplayButton(game);
+    }
 
+    private void SetReplayButton(GameTable game)
+    {
+        replayButton.onClick.RemoveAllListeners();
+        replayButton.onClick.AddListener(() =>
+        {
+            GameManager.Instance.ReplayGame(game);
+        });
     }
 }

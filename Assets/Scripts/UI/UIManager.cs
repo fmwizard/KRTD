@@ -59,6 +59,7 @@ public class UIManager : MonoBehaviour
         gamePanel.SetActive(false);
         settingPanel.SetActive(false);
         rankPanel.SetActive(false);
+        recordPanel.SetActive(false);
         panel.SetActive(true);
     }
 
