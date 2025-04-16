@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-
+using System.Threading;
 public enum CellMark { Empty, X, O }
 public enum PlayerType { AIPlayer, HumanPlayer }
 public enum Difficulty { Easy, Medium, Hard }
@@ -23,6 +23,10 @@ public class GameManager : MonoBehaviour
     private Player playerO;
     private int playerOID;
     private Player currentPlayer;
+
+    private bool isAIThink;
+    private bool aiMoveReady = false;
+    private Vector2Int aiNextMove;
 
     private Board board;
     private string moveSequence;
@@ -110,7 +114,7 @@ public class GameManager : MonoBehaviour
     private void EnterMainMenu()
     {
         gameState = GameState.Setup;
-        uiManager.ShowRankPanel();
+        uiManager.ShowPanel(uiManager.menuPanel);
     }
 
     public void LaunchGame(GameSetting gameSetting)
@@ -140,23 +144,43 @@ public class GameManager : MonoBehaviour
     {
         if (isAITurn)
         {
-            AIPlayer aiPlayer = currentPlayer as AIPlayer;
-            Vector2Int move = aiPlayer.GetNextMove();
-            if (move.x != -1 && move.y != -1)
+            if (!isAIThink && !aiMoveReady)
             {
-                MakeMove(move.x, move.y);
+                HandleAIThink();
             }
-            else
+            else if (!isAIThink && aiMoveReady)
             {
-                Debug.Log("No valid move available.");
+                if (aiNextMove.x != -1 && aiNextMove.y != -1)
+                {
+                    MakeMove(aiNextMove.x, aiNextMove.y);
+                }
+                else
+                {
+                    Debug.Log("No valid move available.");
+                }
+                aiMoveReady = false;
             }
+
         }
         else
         {
-            // Wait for human player input 
+            return;
         }
     }
 
+    private void HandleAIThink()
+    {
+        isAIThink = true;
+        AIPlayer aiPlayer = currentPlayer as AIPlayer;
+        ThreadPool.QueueUserWorkItem(_ =>
+        {
+            Vector2Int move = aiPlayer.GetNextMove();
+            aiNextMove = move;
+            aiMoveReady = true;
+            isAIThink = false;
+        });
+    }
+    
     private void SwitchPlayer()
     {
         currentPlayer = currentPlayer == playerX ? playerO : playerX;
