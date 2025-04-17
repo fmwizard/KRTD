@@ -7,7 +7,7 @@ public class UIManager : MonoBehaviour
     public static UIManager Instance { get; private set; }
     private bool isPaused = false;
     public GameObject menuPanel, settingPanel, rankPanel, recordPanel, 
-        gamePanel, gameOverPanel, pausePanel;
+        gamePanel, gameOverPanel, pausePanel, playPanel;
     public GameObject rankContainer;
     public GameObject playerRecordPrefab;
     public GameObject rankTitlePrefab;
@@ -56,7 +56,7 @@ public class UIManager : MonoBehaviour
     public void ShowPanel(GameObject panel)
     {
         menuPanel.SetActive(false);
-        gamePanel.SetActive(false);
+        playPanel.SetActive(false);
         settingPanel.SetActive(false);
         rankPanel.SetActive(false);
         recordPanel.SetActive(false);

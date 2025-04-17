@@ -33,6 +33,7 @@ public class GameManager : MonoBehaviour
     public GameObject cellPrefab;
     public GameObject cellContainer;
 
+    public GameTable replayGame;
     private void Awake()
     {
         if (Instance == null)
@@ -114,12 +115,13 @@ public class GameManager : MonoBehaviour
     private void EnterMainMenu()
     {
         gameState = GameState.Setup;
-        uiManager.ShowRankPanel();
+        //uiManager.ShowRankPanel();
+        uiManager.ShowPanel(uiManager.menuPanel);
     }
 
     public void LaunchGame(GameSetting gameSetting)
     { 
-        uiManager.ShowPanel(uiManager.gamePanel);
+        uiManager.ShowPanel(uiManager.playPanel);
         InitBoard(gameSetting.boardSize);
         InitRuleSystem(gameSetting.boardSize, gameSetting.winCondition);
         InitPlayers(gameSetting.playerX, gameSetting.playerO);
@@ -131,7 +133,8 @@ public class GameManager : MonoBehaviour
 
     public void ReplayGame(GameTable game)
     {
-        uiManager.ShowPanel(uiManager.gamePanel);
+        replayGame = game;
+        uiManager.ShowPanel(uiManager.playPanel);
         InitBoard(game.BoardSize);
         moveSequence = game.Moves;
         gameState = GameState.InProgress;
@@ -142,15 +145,16 @@ public class GameManager : MonoBehaviour
     {
         string[] moves = sequence.Split('-');
         for (int i = 0; i < moves.Length; i++)
-        {
+        {            
+            yield return new WaitForSeconds(1f);
             string[] coords = moves[i].Split(',');
             int x = int.Parse(coords[0]);
             int y = int.Parse(coords[1]);
             CellMark mark = i % 2 == 0 ? CellMark.X : CellMark.O;
             board.SetCell(x, y, mark);
-            yield return new WaitForSeconds(1f);
         }
         Debug.Log("Replay finished.");
+        gameState = GameState.Finished;
     }
 
     public void EndGame()
@@ -162,6 +166,17 @@ public class GameManager : MonoBehaviour
         playerX = null;
         playerO = null;
         currentPlayer = null;
+        replayGame = null;
+    }
+
+    public void RestartGame()
+    {
+        board.SetupBoard(ruleSystem.BoardSize);
+        currentPlayer = playerX;
+        isAITurn = currentPlayer.PlayerType == PlayerType.AIPlayer;
+        moveSequence = "";
+        gameState = GameState.InProgress;
+        uiManager.ShowPanel(uiManager.playPanel);
     }
 
     private void HandlePlayerTurn()

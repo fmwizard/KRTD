@@ -11,13 +11,19 @@ public interface StrategySystem
 
 public class EasyStrategy : StrategySystem
 {
+    private static readonly System.Random random = new System.Random();
     public Vector2Int GetNextMove(Board board, CellMark playerMark, RuleSystem ruleSystem)
     {
         List<Vector2Int> availableMoves = board.GetAllEmptyCells();
 
         if (availableMoves.Count > 0)
         {
-            return availableMoves[Random.Range(0, availableMoves.Count)];
+            int index;
+            lock (random) // Locking to ensure thread safety
+            {
+                index = random.Next(0, availableMoves.Count);
+            }
+            return availableMoves[index];
         }
 
         return new Vector2Int(-1, -1);
