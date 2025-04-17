@@ -15,6 +15,8 @@ public class SettingPanelUI : MonoBehaviour
     public GameObject player2AIOption;
     public TextMeshProUGUI errorPrompt;
     public TextMeshProUGUI customErrorPrompt;
+    public TextMeshProUGUI editorPrompt;
+    public TextMeshProUGUI editorErrorPrompt;
     public Button launchButton;
     
     public TMP_InputField customBoardSizeInputField;
@@ -23,8 +25,7 @@ public class SettingPanelUI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        errorPrompt.gameObject.SetActive(false);
-        customErrorPrompt.gameObject.SetActive(false);
+        HideErrorPrompts();
         launchButton.onClick.AddListener(OnLaunchButtonClick);
         boardSizeDropdown.onValueChanged.AddListener(OnBoardSizeDropdownValueChanged);
     }
@@ -35,17 +36,25 @@ public class SettingPanelUI : MonoBehaviour
         
     }
 
+    private void HideBoardSizeDropdownPrompt()
+    {
+        customBoardSizeInputField.gameObject.SetActive(false);
+        customWinConditionInputField.gameObject.SetActive(false);
+        editorPrompt.gameObject.SetActive(false);
+    }
+
     private void OnBoardSizeDropdownValueChanged(int value)
     {
+        HideErrorPrompts();
+        HideBoardSizeDropdownPrompt();
         if (boardSizeDropdown.options[value].text == "自定义")
         {
             customBoardSizeInputField.gameObject.SetActive(true);
             customWinConditionInputField.gameObject.SetActive(true);
         }
-        else
+        else if (boardSizeDropdown.options[value].text == "关卡编辑器")
         {
-            customBoardSizeInputField.gameObject.SetActive(false);
-            customWinConditionInputField.gameObject.SetActive(false);
+            editorPrompt.gameObject.SetActive(true);
         }
     }
 
@@ -164,6 +173,12 @@ public class SettingPanelUI : MonoBehaviour
         GameSetting gameSetting = new GameSetting(size, winCondition, playerX, playerO);
         if (size == 1 && winCondition == 1)
         {
+            BoardData data = Serialization.LoadBoardFromFile();
+            if (data == null)
+            {
+                editorErrorPrompt.gameObject.SetActive(true);
+                return;
+            }
             GameManager.Instance.LaunchEditorGame(gameSetting);
         }
         else
@@ -177,5 +192,6 @@ public class SettingPanelUI : MonoBehaviour
     {
         customErrorPrompt.gameObject.SetActive(false);
         errorPrompt.gameObject.SetActive(false);
+        editorErrorPrompt.gameObject.SetActive(false);
     }
 }
