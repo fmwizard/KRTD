@@ -128,6 +128,8 @@ public class GameManager : MonoBehaviour
         InitPlayers(gameSetting.playerX, gameSetting.playerO);
         currentPlayer = playerX;
         moveSequence = "";
+        isAIThink = false;
+        aiMoveReady = false;
         isAITurn = currentPlayer.PlayerType == PlayerType.AIPlayer;
         gameState = GameState.InProgress;
     }
@@ -166,13 +168,13 @@ public class GameManager : MonoBehaviour
     public void EndGame()
     {
         gameState = GameState.Setup;
-        isAIThink = false;
         Destroy(board.gameObject);
         board = null;
         ruleSystem = null;
         playerX = null;
         playerO = null;
         currentPlayer = null;
+        isAITurn = false;
         replayGame = null;
     }
 
@@ -226,6 +228,8 @@ public class GameManager : MonoBehaviour
             {
                 return;
             }
+            // Simulate some thinking time
+            Thread.Sleep(700);
             aiMoveReady = true;
             isAIThink = false;
         });
