@@ -156,7 +156,7 @@ public class SettingPanelUI : MonoBehaviour
             }
         }
         GameSetting gameSetting = new GameSetting(size, winCondition, playerX, playerO);
-        GameManager.Instance.LaunchGame(gameSetting);
+        GameManager.Instance.LaunchEditorGame(gameSetting);
         HideErrorPrompts();
     }
 

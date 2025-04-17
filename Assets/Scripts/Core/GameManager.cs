@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using System.Threading;
+using Newtonsoft.Json;
+using System.IO;
+
 public enum CellMark { Empty, X, O }
 public enum PlayerType { AIPlayer, HumanPlayer }
 public enum Difficulty { Easy, Medium, Hard }
@@ -30,6 +33,7 @@ public class GameManager : MonoBehaviour
 
     private Board board;
     private string moveSequence;
+    private int moveSequenceStart;
     public bool isDraw;
     public GameObject cellPrefab;
     public GameObject cellContainer;
@@ -71,6 +75,14 @@ public class GameManager : MonoBehaviour
         board = boardObject.AddComponent<Board>();
         board.SetupBoard(boardSize);
         UIManager.Instance.SetGameBoardUI(boardSize);
+    }
+
+    private void InitBoardWithJson(string[][] stateData)
+    {
+        GameObject boardObject = new GameObject("Board");
+        board = boardObject.AddComponent<Board>();
+        board.SetupBoardWithJson(stateData);
+        UIManager.Instance.SetGameBoardUI(stateData.Length);
     }
 
     private void InitPlayers(PlayerSetting playerSettingX, PlayerSetting playerSettingO)
@@ -128,12 +140,44 @@ public class GameManager : MonoBehaviour
         InitPlayers(gameSetting.playerX, gameSetting.playerO);
         currentPlayer = playerX;
         moveSequence = "";
+        moveSequenceStart = 0;
         isAIThink = false;
         aiMoveReady = false;
         isAITurn = currentPlayer.PlayerType == PlayerType.AIPlayer;
         gameState = GameState.InProgress;
     }
 
+    public void LaunchEditorGame(GameSetting gameSetting)
+    {
+        Debug.Log("LaunchEditorGame");
+        string fullPath = System.IO.Path.Combine(Application.streamingAssetsPath, "editor_level.json");
+        string json;
+        if (!File.Exists(fullPath))
+        {
+            Debug.LogError($"找不到文件: {fullPath}");
+            return;
+        }
+        json = File.ReadAllText(fullPath);
+
+        BoardData data = JsonConvert.DeserializeObject<BoardData>(json);
+        if (data == null)
+        {
+            Debug.LogError("反序列化 JSON 失败");
+            return;
+        }
+        uiManager.ShowPanel(uiManager.playPanel);
+        InitBoardWithJson(data.initialState);
+        InitRuleSystem(data.boardSize, data.winCondition);
+        InitPlayers(gameSetting.playerX, gameSetting.playerO);
+        currentPlayer = data.currentPlayer == "X" ? playerX : playerO;
+        moveSequence = data.moveSequence;
+        moveSequenceStart = moveSequence.Split('-').Length - 1;
+        isAIThink = false;
+        aiMoveReady = false;
+        isAITurn = currentPlayer.PlayerType == PlayerType.AIPlayer;
+        gameState = GameState.InProgress;
+    }
+    
     public void ReplayGame(GameTable game)
     {
         replayGame = game;
@@ -141,14 +185,30 @@ public class GameManager : MonoBehaviour
         InitBoard(game.BoardSize);
         board.DisableAllCells();
         moveSequence = game.Moves;
+        moveSequenceStart = game.MoveStart;
         gameState = GameState.InProgress;
+        InitReplayWithPreset(moveSequence);
         StartCoroutine(ReplaySequence(moveSequence));
+    }
+
+    private void InitReplayWithPreset(string sequence)
+    {
+        string[] moves = sequence.Split('-');
+        for (int i = 0; i < moveSequenceStart; i++)
+        {
+            string[] coords = moves[i].Split(',');
+            int x = int.Parse(coords[0]);
+            int y = int.Parse(coords[1]);
+            CellMark mark = i % 2 == 0 ? CellMark.X : CellMark.O;
+            board.SetCell(x, y, mark);
+        }
     }
 
     private IEnumerator ReplaySequence(string sequence)
     {
         string[] moves = sequence.Split('-');
-        for (int i = 0; i < moves.Length; i++)
+
+        for (int i = moveSequenceStart; i < moves.Length; i++)
         {            
             yield return new WaitForSeconds(1f);
             string[] coords = moves[i].Split(',');
@@ -257,7 +317,7 @@ public class GameManager : MonoBehaviour
                     int loserId = currentPlayer == playerX ? playerOID : playerXID;
                     PlayerTable winner = DataManager.Instance.GetPlayerRecordById(winnerId);
                     PlayerTable loser = DataManager.Instance.GetPlayerRecordById(loserId);
-                    DataManager.Instance.InsertGameRecord(playerXID, playerOID, winnerId, DateTime.Now.ToString(), ruleSystem.BoardSize, ruleSystem.WinCondition, moveSequence);
+                    DataManager.Instance.InsertGameRecord(playerXID, playerOID, winnerId, DateTime.Now.ToString(), ruleSystem.BoardSize, ruleSystem.WinCondition, moveSequence, moveSequenceStart);
                     DataManager.Instance.UpdatePlayerRecord(winnerId, winner.Wins + 1, winner.Losses, winner.Draws);
                     DataManager.Instance.UpdatePlayerRecord(loserId, loser.Wins, loser.Losses + 1, loser.Draws);
                 }
@@ -272,7 +332,7 @@ public class GameManager : MonoBehaviour
                     int winnerId = -1; // Draw
                     PlayerTable playerX = DataManager.Instance.GetPlayerRecordById(playerXID);
                     PlayerTable playerO = DataManager.Instance.GetPlayerRecordById(playerOID);
-                    DataManager.Instance.InsertGameRecord(playerXID, playerOID, winnerId, DateTime.Now.ToString(), ruleSystem.BoardSize, ruleSystem.WinCondition, moveSequence);
+                    DataManager.Instance.InsertGameRecord(playerXID, playerOID, winnerId, DateTime.Now.ToString(), ruleSystem.BoardSize, ruleSystem.WinCondition, moveSequence, moveSequenceStart);
                     DataManager.Instance.UpdatePlayerRecord(playerXID, playerX.Wins, playerX.Losses, playerX.Draws + 1);
                     DataManager.Instance.UpdatePlayerRecord(playerOID, playerO.Wins, playerO.Losses, playerO.Draws + 1);
                 }

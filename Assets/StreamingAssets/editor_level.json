@@ -1,0 +1,13 @@
+{
+  "boardSize": 5,
+  "winCondition": 3,
+  "initialState": [
+    ["E","E","E","E","E"],
+    ["E","O","E","E","E"],
+    ["E","E","X","E","E"],
+    ["E","E","E","E","E"],
+    ["E","E","E","E","E"]
+  ],
+  "currentPlayer": "X",
+  "moveSequence": "2,2-1,1-"
+}

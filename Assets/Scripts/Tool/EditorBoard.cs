@@ -10,6 +10,7 @@ public class BoardData
     public int winCondition;
     public string[][] initialState;
     public string currentPlayer;
+    public string moveSequence;
 }
 
 public class EditorBoard : MonoBehaviour

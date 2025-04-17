@@ -15,6 +15,7 @@ public class EditorManager : MonoBehaviour
     public GameObject editorCellPrefab;
     public GameObject editorCellContainer;
     private EditorBoard editorBoard;
+    public string moveSequence;
     private CellMark currentMark;
     public CellMark CurrentMark
     {
@@ -51,17 +52,18 @@ public class EditorManager : MonoBehaviour
         SetEditorBoardUI(boardSize);
         editorBoard.SetupBoard(boardSize);
         currentMark = CellMark.X;
-        SerializeEditorBoard();
+        moveSequence = "";
     }
 
-    private void SerializeEditorBoard()
+    public void SerializeEditorBoard()
     {
         BoardData boardData = new BoardData
         {
             boardSize = boardSize,
-            winCondition = 3,
+            winCondition = winCondition,
             initialState = editorBoard.GetBoardState(),
-            currentPlayer = currentMark.ToString()
+            currentPlayer = currentMark.ToString(),
+            moveSequence = moveSequence
         };
         string json = Serialization.SaveBoardToJson(boardData);
         string fileName = "editor_level.json";

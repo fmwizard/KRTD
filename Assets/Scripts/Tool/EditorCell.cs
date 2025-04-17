@@ -71,6 +71,7 @@ public class EditorCell : MonoBehaviour, IPointerClickHandler
         }
         EditorManager instance = EditorManager.Instance;
         CellMark = instance.CurrentMark;
+        instance.moveSequence += $"{x},{y}-";
         instance.CurrentMark = (instance.CurrentMark == CellMark.X) ? CellMark.O : CellMark.X;
     }
     // private void OnRightClick()

@@ -31,6 +31,47 @@ public class Board : MonoBehaviour
         Size = size;
     }
     
+    public void SetupBoardWithJson(string[][] stateData)
+    {
+        cellPrefab = GameManager.Instance.cellPrefab;
+        cellContainer = GameManager.Instance.cellContainer;
+
+        foreach (Transform child in cellContainer.transform)
+        {
+            Destroy(child.gameObject);
+        }
+
+        size = stateData.Length;
+        cells = new Cell[size, size];
+
+        for (int x = 0; x < size; x++)
+        {
+            for (int y = 0; y < size; y++)
+            {
+                GameObject cellObject = Instantiate(cellPrefab, cellContainer.transform);
+                Cell cell = cellObject.GetComponent<Cell>();
+                cell.InitCell(x, y);
+                cells[x, y] = cell;
+
+                // Set the cell mark based on the JSON data
+                if (stateData[x][y] == "X")
+                {
+                    cell.CellMark = CellMark.X;
+                }
+                else if (stateData[x][y] == "O")
+                {
+                    cell.CellMark = CellMark.O;
+                }
+                else
+                {
+                    cell.CellMark = CellMark.Empty;
+                }
+                
+                cell.UpdateCellSprite();
+            }
+        }
+    }
+
     private void InitializeBoard()
     {
         foreach (Transform child in cellContainer.transform)
