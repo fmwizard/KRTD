@@ -14,6 +14,7 @@ public class SettingPanelUI : MonoBehaviour
     public GameObject player2HumanOption;
     public GameObject player2AIOption;
     public TextMeshProUGUI errorPrompt;
+    public TextMeshProUGUI customErrorPrompt;
     public Button launchButton;
     
     public TMP_InputField customBoardSizeInputField;
@@ -23,6 +24,7 @@ public class SettingPanelUI : MonoBehaviour
     void Start()
     {
         errorPrompt.gameObject.SetActive(false);
+        customErrorPrompt.gameObject.SetActive(false);
         launchButton.onClick.AddListener(OnLaunchButtonClick);
         boardSizeDropdown.onValueChanged.AddListener(OnBoardSizeDropdownValueChanged);
     }
@@ -136,10 +138,11 @@ public class SettingPanelUI : MonoBehaviour
 
     public void OnLaunchButtonClick()
     {
+        HideErrorPrompts();
         (int size, int winCondition) = ParseBoardDropdown();
         if (size == 0 || winCondition == 0)
         {
-            errorPrompt.gameObject.SetActive(true);
+            customErrorPrompt.gameObject.SetActive(true);
             return;
         }
         PlayerSetting playerX = ParsePlayerContainer(player1ToggleGroup, player1HumanOption, player1AIOption);
@@ -154,6 +157,12 @@ public class SettingPanelUI : MonoBehaviour
         }
         GameSetting gameSetting = new GameSetting(size, winCondition, playerX, playerO);
         GameManager.Instance.LaunchGame(gameSetting);
+        HideErrorPrompts();
+    }
+
+    public void HideErrorPrompts()
+    {
+        customErrorPrompt.gameObject.SetActive(false);
         errorPrompt.gameObject.SetActive(false);
     }
 }
