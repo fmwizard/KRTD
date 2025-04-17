@@ -85,6 +85,11 @@ public class SettingPanelUI : MonoBehaviour
             return (bSize, bWinCondition);
         }
 
+        if (selectedOption == "关卡编辑器")
+        {
+            return (1, 1);
+        }
+
         int size = int.Parse(selectedOption.Split('x')[0]);
         int winCondition;
         switch (size)
@@ -123,10 +128,10 @@ public class SettingPanelUI : MonoBehaviour
             {
                 difficulty = Difficulty.Easy;
             }
-            else if (aiLevelToggle.name == "MediumToggle")
-            {
-                difficulty = Difficulty.Medium;
-            }
+            // else if (aiLevelToggle.name == "MediumToggle")
+            // {
+            //     difficulty = Difficulty.Medium;
+            // }
             else
             {
                 difficulty = Difficulty.Hard;
@@ -145,6 +150,7 @@ public class SettingPanelUI : MonoBehaviour
             customErrorPrompt.gameObject.SetActive(true);
             return;
         }
+
         PlayerSetting playerX = ParsePlayerContainer(player1ToggleGroup, player1HumanOption, player1AIOption);
         PlayerSetting playerO = ParsePlayerContainer(player2ToggleGroup, player2HumanOption, player2AIOption);
         if (playerX.playerType == PlayerType.HumanPlayer && playerO.playerType == PlayerType.HumanPlayer)
@@ -156,7 +162,14 @@ public class SettingPanelUI : MonoBehaviour
             }
         }
         GameSetting gameSetting = new GameSetting(size, winCondition, playerX, playerO);
-        GameManager.Instance.LaunchEditorGame(gameSetting);
+        if (size == 1 && winCondition == 1)
+        {
+            GameManager.Instance.LaunchEditorGame(gameSetting);
+        }
+        else
+        {
+            GameManager.Instance.LaunchGame(gameSetting);
+        }
         HideErrorPrompts();
     }
 

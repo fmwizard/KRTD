@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 public class UIManager : MonoBehaviour
 {
     public static UIManager Instance { get; private set; }
@@ -14,7 +15,7 @@ public class UIManager : MonoBehaviour
     public GameObject recordContainer;
     public GameObject recordEntryPrefab;
     public GameObject recordTitlePrefab;
-
+    public TextMeshProUGUI ruleText;
     void Awake()
     {
         if (Instance == null)
@@ -70,6 +71,17 @@ public class UIManager : MonoBehaviour
         gridLayout.cellSize = new Vector2(cellLength / size, cellLength / size);
     }
 
+    public void SetGameRuleText(int boardSize, int winCondition)
+    {
+        if (boardSize == -1 || winCondition == -1)
+        {
+            ruleText.text = "";
+            return;
+        }
+        ruleText.text = $"棋盘大小: {boardSize}\n" +
+                        $"胜利连子数: {winCondition}\n";
+    }
+    
     public void ShowPausePanel(bool show)
     {
         if (show)

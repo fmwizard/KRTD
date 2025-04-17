@@ -136,6 +136,7 @@ public class GameManager : MonoBehaviour
     public void LaunchGame(GameSetting gameSetting)
     { 
         uiManager.ShowPanel(uiManager.playPanel);
+        uiManager.SetGameRuleText(gameSetting.boardSize, gameSetting.winCondition);
         InitBoard(gameSetting.boardSize);
         InitRuleSystem(gameSetting.boardSize, gameSetting.winCondition);
         InitPlayers(gameSetting.playerX, gameSetting.playerO);
@@ -153,6 +154,7 @@ public class GameManager : MonoBehaviour
     {
         data = Serialization.LoadBoardFromFile();
         uiManager.ShowPanel(uiManager.playPanel);
+        uiManager.SetGameRuleText(data.boardSize, data.winCondition);
         InitBoardWithJson(data.initialState);
         InitRuleSystem(data.boardSize, data.winCondition);
         InitPlayers(gameSetting.playerX, gameSetting.playerO);
@@ -169,6 +171,7 @@ public class GameManager : MonoBehaviour
     {
         replayGame = game;
         uiManager.ShowPanel(uiManager.playPanel);
+        uiManager.SetGameRuleText(game.BoardSize, game.WinCondition);
         InitBoard(game.BoardSize);
         board.DisableAllCells();
         moveSequence = game.Moves;
@@ -223,6 +226,7 @@ public class GameManager : MonoBehaviour
         isAITurn = false;
         replayGame = null;
         data = null;
+        UIManager.Instance.SetGameRuleText(-1, -1); // Hide the rule text
     }
 
     public void RestartGame()

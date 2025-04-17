@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Newtonsoft.Json;
-
+using TMPro;
 public class EditorManager : MonoBehaviour
 {
     [Header("Board Settings")]
@@ -12,8 +12,10 @@ public class EditorManager : MonoBehaviour
     public string saveFileName = "editor_level.json";
 
     public static EditorManager Instance { get; private set; }
+    [Header("UI Elements")]
     public GameObject editorCellPrefab;
     public GameObject editorCellContainer;
+    public TextMeshProUGUI ruleText;
     private EditorBoard editorBoard;
     private CellMark currentMark;
     public CellMark CurrentMark
@@ -39,6 +41,8 @@ public class EditorManager : MonoBehaviour
     void Start()
     {
         InitBoard(boardSize);
+        ruleText.text = $"棋盘大小: {boardSize}\n" +
+                        $"胜利连子数: {winCondition}\n";
     }
 
     // Update is called once per frame
