@@ -137,6 +137,7 @@ public class GameManager : MonoBehaviour
         replayGame = game;
         uiManager.ShowPanel(uiManager.playPanel);
         InitBoard(game.BoardSize);
+        board.DisableAllCells();
         moveSequence = game.Moves;
         gameState = GameState.InProgress;
         StartCoroutine(ReplaySequence(moveSequence));

@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
 public class Board : MonoBehaviour
 {
     private GameObject cellPrefab;
@@ -99,5 +99,13 @@ public class Board : MonoBehaviour
             }
         }
         return true;
+    }
+
+    public void DisableAllCells()
+    {
+        foreach (Cell cell in cells)
+        {
+            cell.GetComponent<Button>().enabled = false;
+        }
     }
 }

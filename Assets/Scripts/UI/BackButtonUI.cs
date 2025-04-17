@@ -15,7 +15,7 @@ public class BackButtonUI : MonoBehaviour
     private void OnBackButtonClicked()
     {
         GameManager gmInstance = GameManager.Instance;
-        if (gmInstance.gameState == GameState.InProgress)
+        if (gmInstance.gameState == GameState.Finished)
         {
             gmInstance.EndGame();
         }
