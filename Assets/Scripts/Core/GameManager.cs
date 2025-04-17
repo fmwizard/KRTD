@@ -30,6 +30,7 @@ public class GameManager : MonoBehaviour
 
     private Board board;
     private string moveSequence;
+    public bool isDraw;
     public GameObject cellPrefab;
     public GameObject cellContainer;
 
@@ -243,7 +244,7 @@ public class GameManager : MonoBehaviour
                 DataManager.Instance.InsertGameRecord(playerXID, playerOID, winnerId, DateTime.Now.ToString(), ruleSystem.BoardSize, ruleSystem.WinCondition, moveSequence);
                 DataManager.Instance.UpdatePlayerRecord(winnerId, winner.Wins + 1, winner.Losses, winner.Draws);
                 DataManager.Instance.UpdatePlayerRecord(loserId, loser.Wins, loser.Losses + 1, loser.Draws);
-                Debug.Log($"{currentPlayer.PlayerMark} wins!");
+                isDraw = false;
             }
             else if (board.IsBoardFull())
             {
@@ -255,7 +256,7 @@ public class GameManager : MonoBehaviour
                 DataManager.Instance.InsertGameRecord(playerXID, playerOID, winnerId, DateTime.Now.ToString(), ruleSystem.BoardSize, ruleSystem.WinCondition, moveSequence);
                 DataManager.Instance.UpdatePlayerRecord(playerXID, playerX.Wins, playerX.Losses, playerX.Draws + 1);
                 DataManager.Instance.UpdatePlayerRecord(playerOID, playerO.Wins, playerO.Losses, playerO.Draws + 1);
-                Debug.Log("It's a draw!");
+                isDraw = true;
             }
             else
             {            
@@ -272,5 +273,10 @@ public class GameManager : MonoBehaviour
             MakeMove(x, y);
 
         }
+    }
+
+    public Player GetCurrentPlayer()
+    {
+        return currentPlayer;
     }
 }
