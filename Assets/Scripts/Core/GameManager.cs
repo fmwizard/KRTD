@@ -153,6 +153,10 @@ public class GameManager : MonoBehaviour
             int x = int.Parse(coords[0]);
             int y = int.Parse(coords[1]);
             CellMark mark = i % 2 == 0 ? CellMark.X : CellMark.O;
+            if (gameState != GameState.InProgress)
+            {
+                yield break;
+            }
             board.SetCell(x, y, mark);
         }
         Debug.Log("Replay finished.");
@@ -162,6 +166,7 @@ public class GameManager : MonoBehaviour
     public void EndGame()
     {
         gameState = GameState.Setup;
+        isAIThink = false;
         Destroy(board.gameObject);
         board = null;
         ruleSystem = null;
@@ -217,6 +222,10 @@ public class GameManager : MonoBehaviour
         {
             Vector2Int move = aiPlayer.GetNextMove();
             aiNextMove = move;
+            if (gameState != GameState.InProgress)
+            {
+                return;
+            }
             aiMoveReady = true;
             isAIThink = false;
         });
