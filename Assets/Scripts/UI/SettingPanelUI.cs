@@ -24,13 +24,27 @@ public class SettingPanelUI : MonoBehaviour
     {
         errorPrompt.gameObject.SetActive(false);
         launchButton.onClick.AddListener(OnLaunchButtonClick);
-
+        boardSizeDropdown.onValueChanged.AddListener(OnBoardSizeDropdownValueChanged);
     }
 
     // Update is called once per frame
     void Update()
     {
         
+    }
+
+    private void OnBoardSizeDropdownValueChanged(int value)
+    {
+        if (boardSizeDropdown.options[value].text == "自定义")
+        {
+            customBoardSizeInputField.gameObject.SetActive(true);
+            customWinConditionInputField.gameObject.SetActive(true);
+        }
+        else
+        {
+            customBoardSizeInputField.gameObject.SetActive(false);
+            customWinConditionInputField.gameObject.SetActive(false);
+        }
     }
 
     private bool isValidCustomInput(string customBoardSize, string customWinCondition)
