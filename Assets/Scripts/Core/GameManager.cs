@@ -33,6 +33,7 @@ public class GameManager : MonoBehaviour
 
     private Board board;
     private string moveSequence;
+    private BoardData data;
     private int moveSequenceStart;
     public bool isDraw;
     public GameObject cellPrefab;
@@ -141,6 +142,7 @@ public class GameManager : MonoBehaviour
         currentPlayer = playerX;
         moveSequence = "";
         moveSequenceStart = 0;
+        data = null;
         isAIThink = false;
         aiMoveReady = false;
         isAITurn = currentPlayer.PlayerType == PlayerType.AIPlayer;
@@ -149,22 +151,7 @@ public class GameManager : MonoBehaviour
 
     public void LaunchEditorGame(GameSetting gameSetting)
     {
-        Debug.Log("LaunchEditorGame");
-        string fullPath = System.IO.Path.Combine(Application.streamingAssetsPath, "editor_level.json");
-        string json;
-        if (!File.Exists(fullPath))
-        {
-            Debug.LogError($"找不到文件: {fullPath}");
-            return;
-        }
-        json = File.ReadAllText(fullPath);
-
-        BoardData data = JsonConvert.DeserializeObject<BoardData>(json);
-        if (data == null)
-        {
-            Debug.LogError("反序列化 JSON 失败");
-            return;
-        }
+        data = Serialization.LoadBoardFromFile();
         uiManager.ShowPanel(uiManager.playPanel);
         InitBoardWithJson(data.initialState);
         InitRuleSystem(data.boardSize, data.winCondition);
@@ -221,7 +208,6 @@ public class GameManager : MonoBehaviour
             }
             board.SetCell(x, y, mark);
         }
-        Debug.Log("Replay finished.");
         gameState = GameState.Finished;
     }
 
@@ -236,16 +222,30 @@ public class GameManager : MonoBehaviour
         currentPlayer = null;
         isAITurn = false;
         replayGame = null;
+        data = null;
     }
 
     public void RestartGame()
     {
-        board.SetupBoard(ruleSystem.BoardSize);
-        currentPlayer = playerX;
-        isAITurn = currentPlayer.PlayerType == PlayerType.AIPlayer;
-        moveSequence = "";
-        gameState = GameState.InProgress;
-        uiManager.ShowPanel(uiManager.playPanel);
+        if (data == null)
+        {
+            board.SetupBoard(ruleSystem.BoardSize);
+            currentPlayer = playerX;
+            isAITurn = currentPlayer.PlayerType == PlayerType.AIPlayer;
+            moveSequence = "";
+            gameState = GameState.InProgress;
+            uiManager.ShowPanel(uiManager.playPanel);
+        }
+        else
+        {
+            board.SetupBoardWithJson(data.initialState);
+            currentPlayer = data.currentPlayer == "X" ? playerX : playerO;
+            isAITurn = currentPlayer.PlayerType == PlayerType.AIPlayer;
+            moveSequence = data.moveSequence;
+            gameState = GameState.InProgress;
+            uiManager.ShowPanel(uiManager.playPanel);
+        }
+
     }
 
     private void HandlePlayerTurn()

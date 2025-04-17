@@ -9,19 +9,21 @@ public class EditorManager : MonoBehaviour
     [Header("Board Settings")]
     public int boardSize;
     public int winCondition;
-
+    public string saveFileName = "editor_level.json";
 
     public static EditorManager Instance { get; private set; }
     public GameObject editorCellPrefab;
     public GameObject editorCellContainer;
     private EditorBoard editorBoard;
-    public string moveSequence;
     private CellMark currentMark;
     public CellMark CurrentMark
     {
         get { return currentMark; }
         set { currentMark = value; }
     }
+    [HideInInspector]
+    public string moveSequence;
+
     void Awake()
     {
         if (Instance == null)
@@ -66,8 +68,8 @@ public class EditorManager : MonoBehaviour
             moveSequence = moveSequence
         };
         string json = Serialization.SaveBoardToJson(boardData);
-        string fileName = "editor_level.json";
-        string filePath = System.IO.Path.Combine(Application.streamingAssetsPath, fileName);
+        string filePath = System.IO.Path.Combine(Application.streamingAssetsPath, saveFileName);
+        Serialization.saveFileName = saveFileName;
         Serialization.SaveJsonToFile(json, filePath);
     }
 
@@ -77,5 +79,28 @@ public class EditorManager : MonoBehaviour
         GridLayoutGroup gridLayout = editorCellContainer.GetComponent<GridLayoutGroup>();
         float cellLength = editorCellContainer.GetComponent<RectTransform>().rect.width - (size - 1) * gridLayout.spacing.x;
         gridLayout.cellSize = new Vector2(cellLength / size, cellLength / size);
+    }
+
+    public void UndoMove()
+    {
+        if (moveSequence.Length > 0)
+        {
+            string[] moves = moveSequence.Split('-')[0..^1];
+            moveSequence = string.Join("-", moves, 0, moves.Length - 1);
+            if (moveSequence.Length > 0)
+            {
+                moveSequence += "-";
+            }
+            else
+            {
+                moveSequence = "";
+            }
+            string lastMove = moves[moves.Length - 1];
+            string[] coordinates = lastMove.Split(',');
+            int x = int.Parse(coordinates[0]);
+            int y = int.Parse(coordinates[1]);
+            editorBoard.GetEditorCell(x, y).CellMark = CellMark.Empty;
+            currentMark = (currentMark == CellMark.X) ? CellMark.O : CellMark.X;
+        }
     }
 }
