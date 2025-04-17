@@ -247,25 +247,31 @@ public class GameManager : MonoBehaviour
             {
                 gameState = GameState.Finished;
                 moveSequence += $"{x},{y}";
-                int winnerId = currentPlayer == playerX ? playerXID : playerOID;
-                int loserId = currentPlayer == playerX ? playerOID : playerXID;
-                PlayerTable winner = DataManager.Instance.GetPlayerRecordById(winnerId);
-                PlayerTable loser = DataManager.Instance.GetPlayerRecordById(loserId);
-                DataManager.Instance.InsertGameRecord(playerXID, playerOID, winnerId, DateTime.Now.ToString(), ruleSystem.BoardSize, ruleSystem.WinCondition, moveSequence);
-                DataManager.Instance.UpdatePlayerRecord(winnerId, winner.Wins + 1, winner.Losses, winner.Draws);
-                DataManager.Instance.UpdatePlayerRecord(loserId, loser.Wins, loser.Losses + 1, loser.Draws);
+                if (playerXID != playerOID)
+                {
+                    int winnerId = currentPlayer == playerX ? playerXID : playerOID;
+                    int loserId = currentPlayer == playerX ? playerOID : playerXID;
+                    PlayerTable winner = DataManager.Instance.GetPlayerRecordById(winnerId);
+                    PlayerTable loser = DataManager.Instance.GetPlayerRecordById(loserId);
+                    DataManager.Instance.InsertGameRecord(playerXID, playerOID, winnerId, DateTime.Now.ToString(), ruleSystem.BoardSize, ruleSystem.WinCondition, moveSequence);
+                    DataManager.Instance.UpdatePlayerRecord(winnerId, winner.Wins + 1, winner.Losses, winner.Draws);
+                    DataManager.Instance.UpdatePlayerRecord(loserId, loser.Wins, loser.Losses + 1, loser.Draws);
+                }
                 isDraw = false;
             }
             else if (board.IsBoardFull())
             {
                 gameState = GameState.Finished;
                 moveSequence += $"{x},{y}";
-                int winnerId = -1; // Draw
-                PlayerTable playerX = DataManager.Instance.GetPlayerRecordById(playerXID);
-                PlayerTable playerO = DataManager.Instance.GetPlayerRecordById(playerOID);
-                DataManager.Instance.InsertGameRecord(playerXID, playerOID, winnerId, DateTime.Now.ToString(), ruleSystem.BoardSize, ruleSystem.WinCondition, moveSequence);
-                DataManager.Instance.UpdatePlayerRecord(playerXID, playerX.Wins, playerX.Losses, playerX.Draws + 1);
-                DataManager.Instance.UpdatePlayerRecord(playerOID, playerO.Wins, playerO.Losses, playerO.Draws + 1);
+                if (playerXID != playerOID)
+                {
+                    int winnerId = -1; // Draw
+                    PlayerTable playerX = DataManager.Instance.GetPlayerRecordById(playerXID);
+                    PlayerTable playerO = DataManager.Instance.GetPlayerRecordById(playerOID);
+                    DataManager.Instance.InsertGameRecord(playerXID, playerOID, winnerId, DateTime.Now.ToString(), ruleSystem.BoardSize, ruleSystem.WinCondition, moveSequence);
+                    DataManager.Instance.UpdatePlayerRecord(playerXID, playerX.Wins, playerX.Losses, playerX.Draws + 1);
+                    DataManager.Instance.UpdatePlayerRecord(playerOID, playerO.Wins, playerO.Losses, playerO.Draws + 1);
+                }
                 isDraw = true;
             }
             else

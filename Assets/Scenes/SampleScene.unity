@@ -4103,7 +4103,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 300, y: -42.5}
-  m_SizeDelta: {x: 300, y: 80}
+  m_SizeDelta: {x: 400, y: 80}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &357194726
 MonoBehaviour:
@@ -4125,7 +4125,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u68CB\u76D8\u5C3A\u5BF8"
+  m_text: "\u5B9A\u5236\u4F60\u7684\u68CB\u76D8"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: a922ea4ce2c7fbc429ccff99421c9cb8, type: 2}
   m_sharedMaterial: {fileID: 6683170280808583316, guid: a922ea4ce2c7fbc429ccff99421c9cb8, type: 2}
@@ -4152,8 +4152,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 50
-  m_fontSizeBase: 50
+  m_fontSize: 42
+  m_fontSizeBase: 42
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -7113,8 +7113,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 32
+  m_fontSizeBase: 32
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -17382,7 +17382,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u68CB\u76D8\u5C3A\u5BF8\u5FC5\u987B\u5728 3 \u5230 9 \u4E4B\u95F4, \u80DC\u5229\u6240\u9700\u8FDE\u5B50\u6570\u6700\u5C11
+  m_text: "\u81EA\u5B9A\u4E49\u68CB\u76D8\u5C3A\u5BF8\u5FC5\u987B\u5728 3 \u5230
+    9 \u4E4B\u95F4; \u80DC\u5229\u6240\u9700\u8FDE\u5B50\u6570\u6700\u5C11\u4E3A
     3, \u6700\u591A\u7B49\u4E8E\u4F60\u8BBE\u7F6E\u7684\u68CB\u76D8\u8FB9\u957F!"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: a922ea4ce2c7fbc429ccff99421c9cb8, type: 2}
@@ -17410,8 +17411,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 30
+  m_fontSizeBase: 30
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -21114,7 +21115,7 @@ GameObject:
   - component: {fileID: 1789092285}
   - component: {fileID: 1789092284}
   - component: {fileID: 1789092283}
-  - component: {fileID: 1789092282}
+  - component: {fileID: 1789092286}
   m_Layer: 5
   m_Name: QuitButton
   m_TagString: Untagged
@@ -21142,18 +21143,6 @@ RectTransform:
   m_AnchoredPosition: {x: 200, y: -333.3333}
   m_SizeDelta: {x: 200, y: 80}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1789092282
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1789092280}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fa6cdc560a091c74a8b2df02e9566a73, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1789092283
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21236,6 +21225,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1789092280}
   m_CullTransparentMesh: 1
+--- !u!114 &1789092286
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1789092280}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 192ba3612f1ed1b41886f1c02b2b1595, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1792021091
 GameObject:
   m_ObjectHideFlags: 0

@@ -53,14 +53,15 @@ public class FinishedButtonContainer : MonoBehaviour
             else
             {
                 Player winner = instance.GetCurrentPlayer();
+                CellMark winnerMark = winner.PlayerMark;
                 if (winner.PlayerType == PlayerType.HumanPlayer)
                 {
                     HumanPlayer humanPlayer = winner as HumanPlayer;
-                    finishedText.text = "" + humanPlayer.PlayerName + "胜利";
+                    finishedText.text = humanPlayer.PlayerName + " (" + winnerMark.ToString() + ") " + "胜利";
                 }
                 else
                 {
-                    finishedText.text = "AI胜利";
+                    finishedText.text = "AI" + " (" + winnerMark.ToString() + ") " + "胜利";
                 }
             }
         }
