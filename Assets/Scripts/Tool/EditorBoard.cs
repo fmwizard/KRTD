@@ -56,7 +56,7 @@ public class EditorBoard : MonoBehaviour
         }
     }
 
-    public EditorCell GetEditorCell(int x, int y)
+    public EditorCell GetCell(int x, int y)
     {
         if (x >= 0 && x < size && y >= 0 && y < size)
         {
@@ -118,5 +118,43 @@ public class EditorBoard : MonoBehaviour
             }
         }
         return boardState;
+    }
+
+    public bool CheckWinCondition(EditorRuleSystem ruleSystem, CellMark playerMark)
+    {
+        return ruleSystem.CheckWinCondition(this, playerMark);
+    }
+    
+    public int ValidateEditorBoard()
+    {
+        EditorBoard editorBoard = EditorManager.Instance.GetEditorBoard();
+        if (IsBoardFull())
+        {
+            Debug.Log("Board is full.");
+            return 0; // Board is full
+        }
+        else
+        {
+            List<Vector2Int> emptyCells = editorBoard.GetAllEmptyEditorCells();
+            if (emptyCells.Count == size * size)
+            {
+                Debug.Log("No moves made.");
+                return -1; // No moves made
+            }
+            else
+            {
+                if (EditorManager.Instance.isGameWin())
+                {
+                    Debug.Log("Game is won.");
+                    return -2;
+                }
+                else
+                {
+                    Debug.Log("Game is ongoing.");
+                    return 1;
+                }
+            }
+        }
+
     }
 }

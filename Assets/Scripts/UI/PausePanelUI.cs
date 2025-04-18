@@ -26,7 +26,6 @@ public class PausePanelUI : MonoBehaviour
         if (gmInstance.gameState == GameState.InProgress)
         {
             gmInstance.EndGame();
-            UIManager.Instance.SetGameRuleText(-1, -1); // Hide the rule text
         }
         UIManager.Instance.ShowPanel(UIManager.Instance.menuPanel);
     }

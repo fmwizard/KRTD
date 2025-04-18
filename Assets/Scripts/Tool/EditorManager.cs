@@ -103,8 +103,20 @@ public class EditorManager : MonoBehaviour
             string[] coordinates = lastMove.Split(',');
             int x = int.Parse(coordinates[0]);
             int y = int.Parse(coordinates[1]);
-            editorBoard.GetEditorCell(x, y).CellMark = CellMark.Empty;
+            editorBoard.GetCell(x, y).CellMark = CellMark.Empty;
             currentMark = (currentMark == CellMark.X) ? CellMark.O : CellMark.X;
         }
+    }
+
+    public EditorBoard GetEditorBoard()
+    {
+        return editorBoard;
+    }
+
+    public bool isGameWin()
+    {
+        EditorRuleSystem ruleSystem = new EditorRuleSystem(boardSize, winCondition);
+        return editorBoard.CheckWinCondition(ruleSystem, CellMark.X) ||
+               editorBoard.CheckWinCondition(ruleSystem, CellMark.O);
     }
 }

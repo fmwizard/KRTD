@@ -116,10 +116,11 @@ public class UIManager : MonoBehaviour
         for (int i = 0; i < players.Count; i++)
         {
             PlayerTable player = players[i];
-            // if (player.Name == "AI")
-            // {
-            //     continue;
-            // }
+            // Skip AI players
+            if (player.Name == "AI")
+            {
+                continue;
+            }
             GameObject playerRecord = Instantiate(playerRecordPrefab, rankContainer.transform);
             PlayerRecordUI playerRecordUI = playerRecord.GetComponent<PlayerRecordUI>();
             playerRecordUI.SetPlayerRecord(i + 1, player);
