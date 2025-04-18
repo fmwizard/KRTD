@@ -45,8 +45,9 @@
 ## 使用说明
 
 ### 安装（目前仅支持在Windows平台运行）
-1. 从本仓库的[Releases]()处获取游戏文件的压缩包。
+1. 从本仓库的[Releases](https://github.com/fmwizard/KRTD/releases/download/Demo/KRTD.zip)处获取游戏文件的压缩包。
 2. 解压至任意目录，双击启动程序 TicTacToe.exe 即可开始游戏。
+3. 开始对局前可自定义棋局配置，对局开始后若想要退出可按ESC呼出菜单。
 
 ### 关卡编辑器
 1. clone本仓库的工程源文件，在支持2022.3.51f1版本的unity中打开。
