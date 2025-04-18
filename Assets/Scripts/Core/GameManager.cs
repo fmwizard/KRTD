@@ -9,7 +9,7 @@ using System.IO;
 public enum CellMark { Empty, X, O }
 public enum PlayerType { AIPlayer, HumanPlayer }
 public enum Difficulty { Easy, Medium, Hard }
-public enum GameState { Setup, InProgress, Finished }
+public enum GameState { Setup, Menu, InProgress, Finished }
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }

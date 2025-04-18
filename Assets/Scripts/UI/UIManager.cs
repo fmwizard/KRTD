@@ -44,11 +44,19 @@ public class UIManager : MonoBehaviour
 
     public void TogglePause()
     {
-        // if (gameState == GameState.InProgress)
-        // {
-        //     gameState = GameState.Setup;
-        //     uiManager.ShowPanel(uiManager.pausePanel);
-        // }
+        GameManager instance = GameManager.Instance;
+        if (instance.gameState == GameState.InProgress)
+        {
+            instance.gameState = GameState.Menu;
+        }
+        else if (instance.gameState == GameState.Menu)
+        {
+            instance.gameState = GameState.InProgress;
+        }
+        else
+        {
+            return;
+        }
         isPaused = !isPaused;
         Time.timeScale = isPaused ? 0 : 1;
         ShowPausePanel(isPaused);
@@ -81,7 +89,7 @@ public class UIManager : MonoBehaviour
         ruleText.text = $"棋盘大小: {boardSize}\n" +
                         $"胜利连子数: {winCondition}\n";
     }
-    
+
     public void ShowPausePanel(bool show)
     {
         if (show)

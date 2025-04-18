@@ -164,7 +164,7 @@ public class SettingPanelUI : MonoBehaviour
         PlayerSetting playerO = ParsePlayerContainer(player2ToggleGroup, player2HumanOption, player2AIOption);
         if (playerX.playerType == PlayerType.HumanPlayer && playerO.playerType == PlayerType.HumanPlayer)
         {
-            if (playerX.playerName == playerO.playerName)
+            if (playerX.playerName == playerO.playerName || string.IsNullOrEmpty(playerX.playerName) || string.IsNullOrEmpty(playerO.playerName))
             {
                 errorPrompt.gameObject.SetActive(true);
                 return;
