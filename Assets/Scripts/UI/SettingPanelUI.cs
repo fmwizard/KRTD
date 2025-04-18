@@ -145,7 +145,7 @@ public class SettingPanelUI : MonoBehaviour
             {
                 difficulty = Difficulty.Hard;
             }
-            return new PlayerSetting(PlayerType.AIPlayer, "", difficulty);
+            return new PlayerSetting(PlayerType.AIPlayer, "AI", difficulty);
         }
 
     }
@@ -162,10 +162,12 @@ public class SettingPanelUI : MonoBehaviour
 
         PlayerSetting playerX = ParsePlayerContainer(player1ToggleGroup, player1HumanOption, player1AIOption);
         PlayerSetting playerO = ParsePlayerContainer(player2ToggleGroup, player2HumanOption, player2AIOption);
-        if (playerX.playerType == PlayerType.HumanPlayer && playerO.playerType == PlayerType.HumanPlayer)
+        if (playerX.playerType == PlayerType.HumanPlayer || playerO.playerType == PlayerType.HumanPlayer)
         {
-            if (playerX.playerName == playerO.playerName || string.IsNullOrEmpty(playerX.playerName) || string.IsNullOrEmpty(playerO.playerName))
+            if (string.IsNullOrEmpty(playerX.playerName) || string.IsNullOrEmpty(playerO.playerName) ||
+                playerX.playerName == playerO.playerName)
             {
+                Debug.LogError(playerX.playerName + " " + playerO.playerName);
                 errorPrompt.gameObject.SetActive(true);
                 return;
             }

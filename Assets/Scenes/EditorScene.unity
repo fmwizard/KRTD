@@ -1066,8 +1066,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc4aece901c165449ad9c0d2ead34c10, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boardSize: 5
-  winCondition: 3
+  boardSize: 7
+  winCondition: 5
   saveFileName: editor_level.json
   editorCellPrefab: {fileID: 389855202732214376, guid: 5ea1c2fb99845d049940b77ec8ab565d, type: 3}
   editorCellContainer: {fileID: 1773556470}
@@ -1686,8 +1686,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 210}
-  m_SizeDelta: {x: 430, y: 60}
+  m_AnchoredPosition: {x: 0, y: 244}
+  m_SizeDelta: {x: 430, y: 80}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2133631624
 MonoBehaviour:
@@ -1736,15 +1736,15 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 30
-  m_fontSizeBase: 30
+  m_fontSize: 40
+  m_fontSizeBase: 40
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 1
   m_HorizontalAlignment: 2
-  m_VerticalAlignment: 256
+  m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0

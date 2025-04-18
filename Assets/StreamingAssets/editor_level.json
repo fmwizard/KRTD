@@ -1,13 +1,15 @@
 {
-  "boardSize": 5,
-  "winCondition": 3,
+  "boardSize": 7,
+  "winCondition": 5,
   "initialState": [
-    ["E","E","E","E","E"],
-    ["E","E","E","E","E"],
-    ["E","E","X","E","E"],
-    ["E","E","O","X","E"],
-    ["E","E","O","E","E"]
+    ["E","E","E","E","E","E","E"],
+    ["E","E","E","E","E","E","E"],
+    ["E","E","X","E","E","E","E"],
+    ["E","E","E","X","E","E","E"],
+    ["E","O","E","E","O","E","E"],
+    ["E","E","E","E","E","E","E"],
+    ["E","E","E","E","E","E","E"]
   ],
   "currentPlayer": "X",
-  "moveSequence": "2,2-3,2-3,3-4,2-"
+  "moveSequence": "3,3-4,1-2,2-4,4-"
 }

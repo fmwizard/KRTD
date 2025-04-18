@@ -107,7 +107,9 @@ public class UIManager : MonoBehaviour
         ClearRankPanel();
         DataManager instance = DataManager.Instance;
         List<PlayerTable> players = instance.GetAllPlayerRecords();
-        // rank by score
+        // Skip AI players
+        players.RemoveAll(player => player.Name == "AI");
+        // Rank by score
         if (players.Count > 0)
         {
             players.Sort((x, y) => instance.CalculateScore(y).CompareTo(instance.CalculateScore(x)));
@@ -116,11 +118,6 @@ public class UIManager : MonoBehaviour
         for (int i = 0; i < players.Count; i++)
         {
             PlayerTable player = players[i];
-            // Skip AI players
-            if (player.Name == "AI")
-            {
-                continue;
-            }
             GameObject playerRecord = Instantiate(playerRecordPrefab, rankContainer.transform);
             PlayerRecordUI playerRecordUI = playerRecord.GetComponent<PlayerRecordUI>();
             playerRecordUI.SetPlayerRecord(i + 1, player);
